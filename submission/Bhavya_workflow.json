@@ -19,7 +19,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const inputData = $input.all();\n\nreturn inputData.map(item => {\n  // FIX: Access the .body property where Webhook data usually lives\n  const incident = item.json.body || item.json; \n\n  const required = ['incidentId', 'severity', 'title', 'createdAt', 'ownerEmail'];\n  for (const field of required) {\n    if (!incident[field]) {\n      // This will now show you EXACTLY what it sees if it fails again\n      throw new Error(`Validation Failed: Missing ${field}. Received: ${JSON.stringify(incident)}`);\n    }\n  }\n\n  const sevMap = { 'P1': 1, 'P2': 2, 'P3': 3, 'P4': 4 };\n  const mappedSev = sevMap[incident.severity] || 4;\n\n  const dedupeKey = `${incident.incidentId}_${incident.createdAt}`.replace(/[: ]/g, '-');\n\n  const desc = incident.description || \"No description provided.\";\n  const cleanDesc = desc.length > 240 ? desc.substring(0, 237) + \"...\" : desc;\n\n  return {\n    json: {\n      ...incident,\n      mappedSeverity: mappedSev,\n      dedupeKey: dedupeKey,\n      cleanDescription: cleanDesc,\n      slackMessage: `*Incident ${incident.incidentId}* [${incident.severity}]\\n*Title:* ${incident.title}\\n*Details:* ${cleanDesc}`\n    }\n  };\n});"
+        "jsCode": "const inputData = $input.all();\n\nreturn inputData.map(item => {\n  const incident = item.json.body || item.json; \n\n  const required = ['incidentId', 'severity', 'title', 'createdAt', 'ownerEmail'];\n  for (const field of required) {\n    if (!incident[field]) {\n     \n      throw new Error(`Validation Failed: Missing ${field}. Received: ${JSON.stringify(incident)}`);\n    }\n  }\n\n  const sevMap = { 'P1': 1, 'P2': 2, 'P3': 3, 'P4': 4 };\n  const mappedSev = sevMap[incident.severity] || 4;\n\n  const dedupeKey = `${incident.incidentId}_${incident.createdAt}`.replace(/[: ]/g, '-');\n\n  const desc = incident.description || \"No description provided.\";\n  const cleanDesc = desc.length > 240 ? desc.substring(0, 237) + \"...\" : desc;\n\n  return {\n    json: {\n      ...incident,\n      mappedSeverity: mappedSev,\n      dedupeKey: dedupeKey,\n      cleanDescription: cleanDesc,\n      slackMessage: `*Incident ${incident.incidentId}* [${incident.severity}]\\n*Title:* ${incident.title}\\n*Details:* ${cleanDesc}`\n    }\n  };\n});"
       },
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
@@ -120,7 +120,7 @@
     "executionOrder": "v1",
     "binaryMode": "separate"
   },
-  "versionId": "7ba9dc37-c4d6-4e68-a84c-71875f1e92a0",
+  "versionId": "f2c444da-5151-405c-b986-e38fc6c6a0ed",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "3c698cb5e50b4366c22dfde02b11a5725a284a39415f39fb840b040e96b69772"
